@@ -1,27 +1,13 @@
 const express = require("express");
-const database = require("./database");
-const port = 5000;
-
+require("dotenv").config();
 const app = express();
 
-const getUsers = (req, res) => {
-  database
-    .query("SELECT * FROM users")
-    .then(([users]) => {
-      res.status(200).json(users);
-    })
-};
+const port = process.env.APP_PORT ?? 5000;
 
-app.get("/api/users", getUsers);
+const userHandler = require("./useHandler");
+app.get("/api/users", userHandler.getUsers);
+app.get("/api/users/:id", userHandler.getUsersByID);
 
-app.get("/api/users/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const user = users.find(user.id === id)
-    if(!user){
-        return res.status(404).send("Not Found")
-    }
-    res.json(user)
-});
 
 app.listen(port, () => {
   console.log("server is runing");
