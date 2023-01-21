@@ -8,6 +8,7 @@ const getUsers = (req, res) => {
     });
   };
 
+
 const getUsersById = (req, res) => {
   const id = parseInt(req.params.id);
   database
@@ -22,7 +23,6 @@ const getUsersById = (req, res) => {
 
 const postUsers = (req, res) => {
   const { firstname, lastname,email, city, language } = req.body;
-
   database
   .query(
     "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
@@ -37,8 +37,30 @@ const postUsers = (req, res) => {
   });
 };
 
+const putUsers = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { firstname, lastname,email, city, language } = req.body;
+  database
+  .query(
+    "update uesers set firstname = ?, lastname = ?, email = ?, city = ?, language = ?",
+    [firstname, lastname, email, city, language, id]
+  )
+   .then(([result]) =>{
+      if (result.affectedRows === 0){
+        res.status(404).send("Not Found");
+      } else {
+       res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.log.error(err);
+      res.status(500).send("Error editing the users");
+    });
+  };
+
 module.exports = {
   getUsers,
   getUsersById,
   postUsers,
+  putUsers,
 };
