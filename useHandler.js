@@ -40,4 +40,5 @@ const postUsers = (req, res) => {
 module.exports = {
   getUsers,
   getUsersById,
+  postUsers,
 };

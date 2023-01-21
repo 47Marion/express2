@@ -9,7 +9,7 @@ const userHandler = require("./useHandler");
 
 app.get("/api/users", userHandler.getUsers);
 app.get("/api/users/:id", userHandler.getUsersById);
-app.post("/api/movies", userHandler.getUsers);
+app.post("/api/movies", userHandler.postUsers);
 
 
 app.listen(port, (err) => {
