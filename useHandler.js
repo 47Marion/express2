@@ -58,9 +58,28 @@ const putUsers = (req, res) => {
     });
   };
 
+  const deleteUsers = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    database
+    .query("delete from users where id = ?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error deleting the movie");
+    });
+  };
+
 module.exports = {
   getUsers,
   getUsersById,
   postUsers,
   putUsers,
+  deleteUsers,
 };
