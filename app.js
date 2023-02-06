@@ -6,14 +6,30 @@ const userHandler = require("./useHandler");
 
 const validators = require("./validators");
 //app.get("/", userHandler.getUsers);
-const { hashPassword } = require("./auth.js");
+const { hashPassword, verifyPassword, verifyToken } = require("./auth.js");
+
+/*const isItDwight = (req, res) => {
+  if (req.body.email === "dwight@theoffice.com" && req.body.password === "123456"){
+    res.send("Credentials are valid");
+  } else {
+    res.sendStatus(401);
+  }
+};*/
+
 app.use(express.json());
 
+//Route public
 app.get("/api/users", userHandler.getUsers);
 app.get("/api/users/:id", userHandler.getUsersById);
-app.delete("/api/users/:id", userHandler.deleteUsers);
-app.post("/api/users", validators.validator, hashPassword, userHandler.postUsers);
-app.put("/api/users/:id", validators.validator, hashPassword, userHandler.putUsers);
+
+app.post("/api/login", userHandler.getUserByEmailWithPasswordAndPassToNext, verifyPassword);
+
+//Route protect
+app.use(verifyToken);
+
+app.post("/api/users", verifyToken, validators.validator, hashPassword, userHandler.postUsers);
+app.put("/api/users/:id", verifyToken, validators.validator, hashPassword, userHandler.putUsers);
+app.delete("/api/users/:id", verifyToken, userHandler.deleteUsers);
 
 //app.put("/api/users/:id", hashPassword, userHandler.updateUsers);
 
