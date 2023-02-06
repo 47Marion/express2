@@ -27,9 +27,9 @@ app.post("/api/login", userHandler.getUserByEmailWithPasswordAndPassToNext, veri
 //Route protect
 app.use(verifyToken);
 
-app.post("/api/users", verifyToken, validators.validator, hashPassword, userHandler.postUsers);
-app.put("/api/users/:id", verifyToken, validators.validator, hashPassword, userHandler.putUsers);
-app.delete("/api/users/:id", verifyToken, userHandler.deleteUsers);
+app.post("/api/users", validators.validator, hashPassword, userHandler.postUsers);
+app.put("/api/users/:id", validators.validator, hashPassword, userHandler.putUsers);
+app.delete("/api/users/:id", userHandler.deleteUsers);
 
 //app.put("/api/users/:id", hashPassword, userHandler.updateUsers);
 
