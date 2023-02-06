@@ -6,15 +6,16 @@ const userHandler = require("./useHandler");
 
 const validators = require("./validators");
 //app.get("/", userHandler.getUsers);
+const { hashPassword } = require("./auth.js");
+app.use(express.json());
 
 app.get("/api/users", userHandler.getUsers);
 app.get("/api/users/:id", userHandler.getUsersById);
-app.post("/api/users", userHandler.postUsers);
-app.put("/api/users/:id", userHandler.putUsers);
-app.delete("/api/user/:id", userHandler.deleteUsers);
-app.post("/api/users", validators.validateUsers);
-app.put("/api/user/:id", validators.validateUsers);
+app.delete("/api/users/:id", userHandler.deleteUsers);
+app.post("/api/users", validators.validator, hashPassword, userHandler.postUsers);
+app.put("/api/users/:id", validators.validator, hashPassword, userHandler.putUsers);
 
+//app.put("/api/users/:id", hashPassword, userHandler.updateUsers);
 
 app.listen(port, (err) => {
   if (err) {
